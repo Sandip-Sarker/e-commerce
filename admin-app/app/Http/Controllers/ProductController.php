@@ -76,9 +76,9 @@ class ProductController extends Controller
 
               if ($imageUrl)
               {
-                  $save_otherImage    = new ProductImage();
-                  $save_otherImage->product_id    = $save_product->id;
-                  $save_otherImage->other_image    = $imageUrl;
+                  $save_otherImage                  = new ProductImage();
+                  $save_otherImage->product_id      = $save_product->id;
+                  $save_otherImage->other_image     = $imageUrl;
                   $save_otherImage->save();
               }
             }
@@ -96,33 +96,70 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-
         $data['categories']             = Category::all();
         $data['subCategories']          = SubCategory::all();
         $data['brands']                 = Brand::all();
         $data['units']                  = Unit::all();
         $data['product']                = Product::find($id);
-        $data['productOtherImage']      = DB::table('products')
-        ->leftJoin('product_images', 'products.id', '=', 'product_images.product_id')
-        ->where('product_images.product_id', $id)
-            ->select('product_images.other_image')
-        ->get();
-//        dd( $data['productOtherImage'] );
         return view('backend.product.edit')->with($data);
     }
-
     public function update(Request $request, $id)
     {
-//        $update_unit  = Unit::find($id);
-//
-//        $update_unit->name            = $request->name;
-//        $update_unit->code            = $request->code;
-//        $update_unit->description     = $request->description;
-//        $update_unit->status          = $request->status;
-//        $update_unit->save();
 
-        return back()->with('message', 'Product update successfully');
+        $update_product = Product::find($id);
+
+        // Handle main product image
+        if ($request->file('image')) {
+            $imageUrl = imageUpload($request->file('image'), 'assets/upload/product-image/', 'P_');
+        } else {
+            $imageUrl = $update_product->image;
+        }
+
+        // Update product details
+        $update_product->category_id          = $request->category_id;
+        $update_product->sub_category_id      = $request->sub_category_id;
+        $update_product->brand_id             = $request->brand_id;
+        $update_product->unit_id              = $request->unit_id;
+        $update_product->name                 = $request->name;
+        $update_product->code                 = $request->code;
+        $update_product->short_description    = $request->short_description;
+        $update_product->long_description     = $request->long_description;
+        $update_product->regular_price        = $request->regular_price;
+        $update_product->selling_price        = $request->selling_price;
+        $update_product->stock_amount         = $request->stock_amount;
+        $update_product->meta_title           = $request->meta_title;
+        $update_product->meta_description     = $request->meta_description;
+        $update_product->image                = $imageUrl;
+        $update_product->status               = $request->status;
+        $update_product->save();
+
+        // Check if new "other images" are uploaded
+        if ($request->file('other_image')) {
+            // Find and delete old product images
+            $productImages = ProductImage::where('product_id', $id)->get();
+            foreach ($productImages as $productImage) {
+                if (file_exists(public_path($productImage->other_image))) {
+                    unlink(public_path($productImage->other_image));
+                }
+                $productImage->delete();
+            }
+
+            // Save new "other images"
+            foreach ($request->file('other_image') as $key => $otherImage) {
+                $imageUrl = imageUpload($otherImage, 'assets/upload/product-other-image/', 'Other_', $key);
+
+                if ($imageUrl) {
+                    $save_otherImage                  = new ProductImage();
+                    $save_otherImage->product_id      = $update_product->id;
+                    $save_otherImage->other_image     = $imageUrl;
+                    $save_otherImage->save();
+                }
+            }
+        }
+
+        return back()->with('message', 'Product updated successfully');
     }
+
 
     public function destroy($id)
     {

@@ -34,38 +34,40 @@
                                 <th class="wd-15p border-bottom-0">SL</th>
                                 <th class="wd-15p border-bottom-0">Category</th>
                                 <th class="wd-15p border-bottom-0">Sub Category</th>
-                                <th class="wd-15p border-bottom-0">Brand</th>
                                 <th class="wd-15p border-bottom-0">Name</th>
                                 <th class="wd-15p border-bottom-0">Price</th>
                                 <th class="wd-15p border-bottom-0">Image</th>
-                                <th class="wd-15p border-bottom-0">Status</th>
                                 <th class="wd-25p border-bottom-0">Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($products as $product)
-                            <tr>
-                                <td>{{$loop->iteration}}</td>
-                                <td>{{$product->category->name ?? ''}}</td>
-                                <td>{{$product->subCategory->name ?? ''}}</td>
-                                <td>{{$product->brand->name ?? ''}}</td>
-                                <td>{{$product->name ?? ''}}</td>
-                                <td>
-                                    <ul>
-                                        <li>Regular Price: {{$product->regular_price ?? ''}}</li>
-                                        <li>Selling Price: {{$product->selling_price ?? ''}}</li>
-                                    </ul>
-                                </td>
-                                <td>
-                                    <img src="{{asset('')}}assets/upload/product-image/{{$product->image ?? ''}}" height="50" width="50">
-                                </td>
-                                <td>{{$product->status ?? ''}}</td>
-                                <td>
-                                    <a href="{{route('product.show', $product->id ?? '')}}" title="Show"> <i class="fa fa-eye"></i></a>
-                                    <a href="{{route('product.edit', $product->id ?? '')}}" title="Edit"> <i class="fa fa-edit"></i></a>
-                                    <a href="{{route('product.delete', $product->id ?? '')}}" title="Delete"> <i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$product->category->name ?? ''}}</td>
+                                    <td>{{$product->subCategory->name ?? ''}}</td>
+                                    <td>{{$product->name ?? ''}}</td>
+                                    <td>
+                                        <ul>
+                                            <li>Regular Price: {{$product->regular_price ?? ''}}</li>
+                                            <li>Selling Price: {{$product->selling_price ?? ''}}</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <img src="{{asset('')}}assets/upload/product-image/{{$product->image ?? ''}}"
+                                             height="50" width="50">
+                                    </td>
+                                    <td>
+                                        <a href="{{route('product.show', $product->id ?? '')}}" title="Show"
+                                           class="btn btn-info">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a href="{{route('product.edit', $product->id ?? '')}}" title="Edit"
+                                           class="btn btn-primary"> <i class="fa fa-edit"></i></a>
+                                        <a href="{{route('product.delete', $product->id ?? '')}}" title="Delete"
+                                           class="btn btn-danger"> <i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
                             @endforeach
                             </tbody>
                         </table>

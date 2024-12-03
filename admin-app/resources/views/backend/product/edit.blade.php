@@ -33,7 +33,8 @@
                         <div class="row mb-3">
                             <label class="col-md-3" for="name">Category Name</label>
                             <div class="col-md-9">
-                                <select class="form-control form-select" name="category_id">
+                                <select class="form-control form-select" name="category_id"
+                                        onchange="getSubCategoryByCategory(this.value)">
                                     <option value="">-- Select Category --</option>
                                     @foreach($categories as $category)
                                         <option value="{{$category->id}}" {{$product->category_id == $category->id ? 'selected' : ''}}> {{$category->name}} </option>
@@ -45,7 +46,7 @@
                         <div class="row mb-3">
                             <label class="col-md-3" for="name">Sub Category Name</label>
                             <div class="col-md-9">
-                                <select class="form-control form-select" name="sub_category_id">
+                                <select class="form-control form-select" name="sub_category_id" id="subCategory">
                                     <option value="">-- Select Sub Category --</option>
                                     @foreach($subCategories as $subCategory)
                                         <option value="{{$subCategory->id}}" {{$product->sub_category_id == $subCategory->id ? 'selected' : ''}}> {{$subCategory->name}} </option>
@@ -107,7 +108,7 @@
                             <label class="col-md-3">Long Description</label>
                             <div class="col-md-9">
                                 <textarea name="long_description" value="{{old('long_description')}}" class="form-control"
-                                          id="summernote"   placeholder="Text Something Here...">{!! $product->long_description !!}}</textarea>
+                                          id="summernote"   placeholder="Text Something Here...">{!! $product->long_description !!}</textarea>
                             </div>
                         </div>
 
@@ -160,8 +161,8 @@
                             <label class="col-md-3">Product Other Image</label>
                             <div class="col-md-9">
                                 <input type="file" value="{{old('other_image')}}" multiple name="other_image[]" class="form-control-file">
-                                @foreach($productOtherImage as $otherImages)
-                                <img src="{{asset('')}}assets/upload/product-other-image/{{$otherImages->other_image}}" height="50" width="50">
+                                @foreach($product->productImages as $productImage)
+                                <img src="{{asset('')}}assets/upload/product-other-image/{{$productImage->other_image}}" height="50" width="50">
                                 @endforeach
                             </div>
                         </div>
@@ -169,15 +170,15 @@
                         <div class="row mb-3">
                             <label class="col-md-3">Publication Status</label>
                             <div class="col-md-9">
-                                <label> <input type="radio" name="status" value="1" checked> Published</label>
-                                <label> <input type="radio" name="status" value="0"> Unpublished</label>
+                                <label> <input type="radio" name="status" {{$product->status == 1 ? 'checked' : ''}} value="1" checked> Published</label>
+                                <label> <input type="radio" name="status" {{$product->status == 0 ? 'checked' : ''}} value="0"> Unpublished</label>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <label class="col-md-3"></label>
                             <div class="col-md-9">
-                                <button type="submit" class="btn btn-success">Create New Product</button>
+                                <button type="submit" class="btn btn-success">Update Product</button>
                             </div>
                         </div>
                     </form>

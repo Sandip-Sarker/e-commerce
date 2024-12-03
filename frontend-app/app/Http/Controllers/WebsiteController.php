@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
 {
+
     public function index()
     {
-        return view('website.home.index');
+        $data['adminUrl']       = $this->adminUrl();
+        $data['categories']     = Category::all();
+        $data['products']       = Product::latest()->take(8)->get();
+        return view('website.home.index')->with($data);
     }
 
     public function aboutUs()
