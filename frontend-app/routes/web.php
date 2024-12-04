@@ -8,8 +8,9 @@ use App\Http\Controllers\CheakoutController;
 Route::get('/', [WebsiteController::class, 'index'])->name('home');
 Route::get('/about-us', [WebsiteController::class, 'aboutUs'])->name('about-us');
 Route::get('/contact-us', [WebsiteController::class, 'contactUs'])->name('contact-us');
-Route::get('/all-product', [WebsiteController::class, 'allProduct'])->name('all-product');
-Route::get('/product-details', [WebsiteController::class, 'productDetails'])->name('product-details');
+Route::get('/all-product/{id}', [WebsiteController::class, 'allProduct'])->name('all-product');
+Route::get('/sub-category-wise-product/{id}', [WebsiteController::class, 'SubCategoryWiseProduct'])->name('sub-category-wise-product');
+Route::get('/product-details/{id}', [WebsiteController::class, 'productDetails'])->name('product-details');
 
 Route::controller(CartController::class)->group(function (){
    Route::get('/cart-index', 'index')->name('cart-index');

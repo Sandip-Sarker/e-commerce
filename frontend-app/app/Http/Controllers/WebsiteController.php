@@ -12,8 +12,8 @@ class WebsiteController extends Controller
     public function index()
     {
         $data['adminUrl']       = $this->adminUrl();
-        $data['categories']     = Category::all();
         $data['products']       = Product::latest()->take(8)->get();
+        $data['categories']     = Category::all();
         return view('website.home.index')->with($data);
     }
 
@@ -21,18 +21,32 @@ class WebsiteController extends Controller
     {
         return view('website.home.about-us');
     }
+
     public function contactUs()
     {
         return view('website.home.contact-us');
     }
 
-    public function allProduct()
+    public function allProduct($id)
     {
-        return view('website.home.product');
+        $data['adminUrl']       = $this->adminUrl();
+        $data['categories']     = Category::all();
+        $data['products']       = Product::where('category_id', $id)->latest()->get();
+        return view('website.home.product')->with($data);
     }
 
-    public function productDetails()
+    public function SubCategoryWiseProduct($id)
     {
-        return view('website.home.product-details');
+        $data['adminUrl']       = $this->adminUrl();
+        $data['products']       = Product::where('sub_category_id', $id)->latest()->get();
+        return view('website.home.product')->with($data);
+    }
+
+    public function productDetails($id)
+    {
+        $data['adminUrl']       = $this->adminUrl();
+        $data['categories']     = Category::all();
+        $data['product']        = Product::find($id);
+        return view('website.home.product-details')->with($data);
     }
 }

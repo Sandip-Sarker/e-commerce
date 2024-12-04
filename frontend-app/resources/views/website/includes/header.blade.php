@@ -193,28 +193,31 @@
         <div class="row align-items-center">
             <div class="col-lg-8 col-md-6 col-12">
                 <div class="nav-inner">
-
+                    {{--Category name here--}}
                     <div class="mega-category-menu">
                         <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
                         <ul class="sub-category">
                             @foreach($categories as $category)
                             <li>
-                                <a href="{{route('all-product')}}">{{$category->name}}
+                                <a href="{{route('all-product', ['id' => $category->id])}}">{{$category->name}}
                                     @if(count($category->subCategories) > 0)
                                         <i class="lni lni-chevron-right"></i>
                                     @endif
                                 </a>
+                                {{--Sub Category name here--}}
                                 <ul class="inner-sub-category">
                                     @if(count($category->subCategories) > 0)
                                         @foreach($category->subCategories as $subCategory)
-                                            <li><a href="product-grids.html">{{$subCategory->name}}</a></li>
+                                            <li><a href="{{route('sub-category-wise-product', $subCategory->id)}}">{{$subCategory->name}}</a></li>
                                         @endforeach
                                     @endif
                                 </ul>
+                                {{--Sub Category name here--}}
                             </li>
                             @endforeach
                         </ul>
                     </div>
+                    {{--Category name here--}}
 
 
                     <nav class="navbar navbar-expand-lg">
